@@ -30,7 +30,7 @@ func main() {
 	fmt.Printf("Starting application on port %s\n", portNumber)
 
 	srv := &http.Server{
-		Addr: portNumber,
+		Addr:    portNumber,
 		Handler: routes(&app),
 	}
 	err = srv.ListenAndServe()
