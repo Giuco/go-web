@@ -7,15 +7,30 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/Giuco/go-web/pkg/config"
 )
 
 var functions = template.FuncMap{}
+var app *config.AppConfig
+
+func NewTemplates(a *config.AppConfig) {
+	app = a
+}
 
 // RenderTemplate reads, parses and renders the template using html/template
+
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
-	tc, err := CreateTemplateCache()
-	if err != nil {
-		log.Fatal(err)
+	var tc map[string]*template.Template
+	var err error
+
+	if app.UseCache {
+		tc = app.TemplateCache
+	} else {
+		tc, err = CreateTemplateCache()
+		if err != nil {
+			log.Fatal("could not load template cache", err)
+		}
 	}
 
 	t, ok := tc[tmpl]
@@ -60,7 +75,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	for _, pagePath := range pagesPaths {
 		// creates a new page
 		name := filepath.Base(pagePath)
-		fmt.Println("Page is currently", name)
+		fmt.Println("loding template", name, "into cache")
 		ts, err := template.New(name).Funcs(functions).ParseFiles(pagePath)
 		if err != nil {
 			return templateCache, err
