@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/Giuco/go-web/pkg/config"
+	"github.com/Giuco/go-web/pkg/models"
 )
 
 var functions = template.FuncMap{}
@@ -18,9 +19,12 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-// RenderTemplate reads, parses and renders the template using html/template
+func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+	return td
+}
 
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
+// RenderTemplate reads, parses and renders the template using html/template
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 	var err error
 
@@ -39,7 +43,8 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	}
 
 	buf := new(bytes.Buffer)
-	err = t.Execute(buf, nil)
+	td = AddDefaultData(td)
+	err = t.Execute(buf, td)
 	if err != nil {
 		log.Fatal("could not execute template:", err)
 	}
