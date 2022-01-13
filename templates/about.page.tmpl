@@ -8,6 +8,15 @@
             <H1>This is the about page</H1>
             <p> Some text about the about page</p>
             <p> This came from the template: {{index .StringMap "test"}} </p>
+            
+            <p>
+                {{if ne (index .StringMap "remote_ip") ""}}
+                    Your remote IP address is {{index .StringMap "remote_ip"}}
+                {{else}}
+                    I don't know your IP address yes. Please visit the <a href="/">Home page</a>
+                {{end}}
+            </p>
+
         </div>
     </div>
 </div>

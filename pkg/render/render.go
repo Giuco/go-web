@@ -80,7 +80,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	for _, pagePath := range pagesPaths {
 		// creates a new page
 		name := filepath.Base(pagePath)
-		fmt.Println("loding template", name, "into cache")
+		fmt.Println("loading template", name, "into cache")
 		ts, err := template.New(name).Funcs(functions).ParseFiles(pagePath)
 		if err != nil {
 			return templateCache, err
